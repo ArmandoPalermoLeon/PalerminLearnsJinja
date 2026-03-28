@@ -1,0 +1,162 @@
+<!-- { #
+ base.html - Foundation template
+KEY CONCEPTS: 
+1. {% block %}
+2. {% if %} - Conditional rendering
+3. {{ url_for() }} -- Generate url's dynamically
+4. {% include %}
+#} -->
+
+<<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}BlogHub - Flask & Jinja2 {% endblock %}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+ 
+        :root {
+            --primary: #2563eb;
+            --secondary: #f97316;
+            --dark: #1e293b;
+            --light: #f1f5f9;
+            --border: #e2e8f0;
+        }
+ 
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--dark);
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+ 
+        header {
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+ 
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+ 
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+        }
+ 
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+ 
+        .nav-links a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+ 
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+ 
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+ 
+        footer {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+ 
+        .search-box {
+            display: flex;
+            gap: 0.5rem;
+        }
+ 
+        .search-box input {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+ 
+        .search-box button {
+            padding: 0.5rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+ 
+        .search-box button:hover {
+            background: #1d4ed8;
+        }
+ 
+        {% block extra_css %}{% endblock %}
+    </style>
+</head>
+<body>
+  <!-- The whole purpose of this is to understand template inheritance in jinja, used for avoiding repeating HTML structure like the navigation, footer and styling-->
+    <!--It follows the next format: {% block content %}Something{% endblock %} -->
+  {# navigation header #}
+    <header>
+      <nav>
+        <a href="{{ url_for('index') " class="logo">BlogHub</a>
+        <ul class="nav-links">
+          <li><a href="{{ url_for('index') }}"">Home</a></li>
+          <li><a href="{{ url_for('about') }}"">About</a></li>
+          {# Search form using GET method #}
+          <li>
+            <form method="GET" action="{{ url_for('search') }}" class="search-box">
+               <input type="text" name="q" placeholder="Search posts..." value="{{ requests.args.get('q', '') }}">
+               <button type="submit">Search</button>
+            </form>
+          </li>
+        </ul>
+      </nav>
+    </header>
+    
+    {# Main content - this is replaced by child templates #}
+    <main class="container">
+        {% block content %}
+            <p>Default content - this will be replaced by child templates</p>
+        {% endblock %}
+    </main>
+ 
+    {# Footer #}
+    <footer>
+        <p>&copy; 2024 BlogHub. Learn Flask & Jinja2 </p>
+        <p style="font-size: 0.9rem; margin-top: 1rem;">
+            Built as a learning project for Jinja2 template integration with Flask
+        </p>
+    </footer>
+ 
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
+
+
