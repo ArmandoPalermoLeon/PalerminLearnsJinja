@@ -1,0 +1,100 @@
+{#
+  404.html - Page not found
+  
+  KEY CONCEPTS:
+  1. Error templates in Flask
+  2. url_for() for navigation
+#}
+
+{% extends "base.html" %}
+
+{% block title %}Page Not Found - BlogHub{% endblock %}
+
+{% block extra_css %}
+<style>
+    .error-container {
+        background: white;
+        padding: 4rem 2rem;
+        border-radius: 8px;
+        text-align: center;
+        min-height: 400px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .error-code {
+        font-size: 4rem;
+        font-weight: bold;
+        color: var(--primary);
+        margin-bottom: 1rem;
+    }
+
+    .error-message {
+        font-size: 1.5rem;
+        color: var(--dark);
+        margin-bottom: 1rem;
+    }
+
+    .error-description {
+        color: #64748b;
+        font-size: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .error-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+    }
+
+    .error-link {
+        padding: 0.75rem 1.5rem;
+        border-radius: 4px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.2s;
+    }
+
+    .home-link {
+        background: var(--primary);
+        color: white;
+    }
+
+    .home-link:hover {
+        background: #1d4ed8;
+        transform: translateY(-2px);
+    }
+
+    .back-link {
+        background: var(--border);
+        color: var(--dark);
+    }
+
+    .back-link:hover {
+        background: #cbd5e1;
+        transform: translateY(-2px);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <div class="error-container">
+        <div class="error-code">404</div>
+        <div class="error-message">Page Not Found</div>
+        <p class="error-description">
+            Sorry! We couldn't find the page you're looking for.
+        </p>
+        
+        <div class="error-actions">
+            <a href="{{ url_for('index') }}" class="error-link home-link">
+                Go to Home
+            </a>
+            <a href="javascript:history.back()" class="error-link back-link">
+                Go Back
+            </a>
+        </div>
+    </div>
+{% endblock %}

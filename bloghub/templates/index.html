@@ -1,8 +1,22 @@
+{#
+  index.html - Home page
+  
+  KEY JINJA2 CONCEPTS SHOWN:
+  1. {% extends %} - Inherit from base.html
+  2. {% for %} - Loop through posts
+  3. {{ variable }} - Display variables
+  4. {{ variable | filter }} - Apply filters (upper, lower, date formatting)
+  5. {% if %} - Conditional rendering
+  6. {{ url_for() }} - Generate URLs dynamically
+#}
+
 {% extends "base.html" %}
+
 {% block title %}Home - BlogHub{% endblock %}
+
 {% block extra_css %}
 <style>
-   .featured-post {
+    .featured-post {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
         padding: 3rem 2rem;
@@ -10,12 +24,12 @@
         margin-bottom: 3rem;
         box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     }
- 
+
     .featured-post h1 {
         font-size: 2.5rem;
         margin-bottom: 1rem;
     }
- 
+
     .featured-post .meta {
         display: flex;
         gap: 2rem;
@@ -23,7 +37,7 @@
         font-size: 0.95rem;
         opacity: 0.9;
     }
- 
+
     .featured-post a {
         display: inline-block;
         margin-top: 1.5rem;
@@ -35,18 +49,18 @@
         font-weight: bold;
         transition: transform 0.2s;
     }
- 
+
     .featured-post a:hover {
         transform: translateY(-2px);
     }
- 
+
     .posts-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
         gap: 2rem;
         margin-bottom: 3rem;
     }
- 
+
     .post-card {
         background: white;
         border-radius: 8px;
@@ -54,50 +68,50 @@
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         transition: transform 0.3s, box-shadow 0.3s;
     }
- 
+
     .post-card:hover {
         transform: translateY(-8px);
         box-shadow: 0 12px 20px rgba(0,0,0,0.15);
     }
- 
+
     .post-image {
         width: 100%;
         height: 200px;
         object-fit: cover;
     }
- 
+
     .post-content {
         padding: 1.5rem;
     }
- 
+
     .post-title {
         font-size: 1.25rem;
         margin-bottom: 0.5rem;
         color: var(--dark);
     }
- 
+
     .post-title a {
         text-decoration: none;
         color: inherit;
         transition: color 0.2s;
     }
- 
+
     .post-title a:hover {
         color: var(--primary);
     }
- 
+
     .post-meta {
         font-size: 0.85rem;
         color: #64748b;
         margin-bottom: 1rem;
     }
- 
+
     .post-excerpt {
         color: #475569;
         margin-bottom: 1rem;
         line-height: 1.5;
     }
- 
+
     .post-footer {
         display: flex;
         justify-content: space-between;
@@ -105,13 +119,13 @@
         border-top: 1px solid var(--border);
         padding-top: 1rem;
     }
- 
+
     .post-tags {
         display: flex;
         flex-wrap: wrap;
         gap: 0.5rem;
     }
- 
+
     .tag {
         display: inline-block;
         background: #e0e7ff;
@@ -123,23 +137,23 @@
         text-decoration: none;
         transition: background 0.2s;
     }
- 
+
     .tag:hover {
         background: var(--primary);
         color: white;
     }
- 
+
     .view-count {
         font-size: 0.85rem;
         color: #94a3b8;
     }
- 
+
     .empty-state {
         text-align: center;
         padding: 3rem 2rem;
         color: #64748b;
     }
- 
+
     .stats {
         background: white;
         padding: 2rem;
@@ -150,17 +164,17 @@
         gap: 2rem;
         text-align: center;
     }
- 
+
     .stat-box {
         padding: 1rem;
     }
- 
+
     .stat-number {
         font-size: 2rem;
         font-weight: bold;
         color: var(--primary);
     }
- 
+
     .stat-label {
         color: #64748b;
         margin-top: 0.5rem;
@@ -170,27 +184,28 @@
 {% endblock %}
 
 {% block content %}
-  {# Generate the stats division}
-  <div class="stats"> 
-    <div class="stat-box">
-      <div class="stat-number">{{ total_posts }}</div> <!--Create a variable -->
-      <div class="stat-label">Total Posts</div>
+    {# Statistics section #}
+    <div class="stats">
+        <div class="stat-box">
+            <div class="stat-number">{{ total_posts }}</div>
+            <div class="stat-label">Total Posts</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number">{{ posts | length }}</div>
+            <div class="stat-label">Published</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number">
+                {# Calculate total views from all posts #}
+                {% set total_views = 0 %}
+                {% for post in posts %}
+                    {% set total_views = total_views + post.views %}
+                {% endfor %}
+                {{ total_views | default(0) }}
+            </div>
+            <div class="stat-label">Total Views</div>
+        </div>
     </div>
-    <div class="stat-box">
-      <div class="stat-number">{{ posts | length}}</div> <!-- Variable with a filter-->
-      <div class="stat-label">Published</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-number">
-       {% set total_views = 0 %}
-       {% for post in posts %}
-        {% set total_views = total_views + post.views %}
-       {% endfor %}
-       {{ total_views | default(0) }}
-      </div>
-      <div class="stat-label">Total Views</div>
-    </div>
-  </div>
 
     {# Featured post section (if featured post exists) #}
     {% if featured %}
@@ -201,23 +216,23 @@
             <h2 style="font-size: 2rem; margin-bottom: 0.5rem;">{{ featured.title }}</h2>
             
             <div class="meta">
-                <span> By <a href="{{ url_for('author_posts', author=featured.author) }}" 
+                <span>👤 By <a href="{{ url_for('author_posts', author=featured.author) }}" 
                     style="color: white; text-decoration: underline;">{{ featured.author }}</a></span>
                 {# Format date with Jinja2 date filter #}
-                <span> {{ featured.date.strftime('%B %d, %Y') }}</span>
-                <span> {{ featured.views | default(0) }} views</span>
+                <span>📅 {{ featured.date.strftime('%B %d, %Y') }}</span>
+                <span>👁️ {{ featured.views | default(0) }} views</span>
             </div>
             
             <p>{{ featured.excerpt }}</p>
             <a href="{{ url_for('post_detail', post_id=featured.id) }}">Read Full Article →</a>
         </div>
     {% endif %}
- 
+
     {# All posts section #}
     <h2 style="margin: 2rem 0 1rem 0; color: var(--dark);">
         📚 All Posts ({{ posts | length }})
     </h2>
- 
+
     {% if posts %}
         <div class="posts-grid">
             {# Loop through all posts #}
@@ -233,7 +248,7 @@
                         </h3>
                         
                         <div class="post-meta">
-                             By {{ post.author }} • 
+                            📝 By {{ post.author }} • 
                             {# Format date - Jinja2 filter #}
                             {{ post.date.strftime('%b %d, %Y') }}
                         </div>
@@ -252,7 +267,7 @@
                             </div>
                             
                             <div class="view-count">
-                                 {{ post.views | default(0) }}
+                                👁️ {{ post.views | default(0) }}
                             </div>
                         </div>
                     </div>

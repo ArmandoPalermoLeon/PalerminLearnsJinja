@@ -1,0 +1,241 @@
+{#
+  search.html - Search results page
+  
+  KEY CONCEPTS:
+  1. request.args - Access URL query parameters
+  2. Multiple {% if %} conditions
+  3. Empty state handling
+  4. Loop with nested conditionals
+#}
+
+{% extends "base.html" %}
+
+{% block title %}Search Results - BlogHub{% endblock %}
+
+{% block extra_css %}
+<style>
+    .search-header {
+        background: white;
+        padding: 2rem;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .search-header h1 {
+        color: var(--dark);
+        margin-bottom: 1rem;
+    }
+
+    .results-count {
+        color: #64748b;
+        font-size: 1.1rem;
+    }
+
+    .search-results {
+        display: grid;
+        gap: 1.5rem;
+    }
+
+    .result-item {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 8px;
+        border-left: 4px solid var(--primary);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        transition: all 0.3s;
+    }
+
+    .result-item:hover {
+        box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        transform: translateX(4px);
+    }
+
+    .result-title {
+        font-size: 1.25rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .result-title a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .result-title a:hover {
+        text-decoration: underline;
+    }
+
+    .result-meta {
+        color: #64748b;
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+    }
+
+    .result-excerpt {
+        color: #475569;
+        line-height: 1.6;
+        margin-bottom: 1rem;
+    }
+
+    .result-tags {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .result-tag {
+        display: inline-block;
+        background: #e0e7ff;
+        color: var(--primary);
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+
+    .empty-state {
+        background: white;
+        padding: 3rem 2rem;
+        border-radius: 8px;
+        text-align: center;
+        color: #64748b;
+    }
+
+    .empty-state h2 {
+        color: var(--dark);
+        margin-bottom: 1rem;
+    }
+
+    .search-suggestions {
+        margin-top: 2rem;
+        padding: 2rem;
+        background: #f0f4f8;
+        border-radius: 8px;
+    }
+
+    .search-suggestions h3 {
+        color: var(--dark);
+        margin-bottom: 1rem;
+    }
+
+    .suggestion-list {
+        display: grid;
+        gap: 0.5rem;
+    }
+
+    .suggestion-link {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        background: white;
+        color: var(--primary);
+        border-radius: 4px;
+        text-decoration: none;
+        font-weight: 500;
+        border: 1px solid var(--border);
+        transition: all 0.2s;
+    }
+
+    .suggestion-link:hover {
+        background: var(--primary);
+        color: white;
+    }
+
+    .back-to-home {
+        display: inline-block;
+        margin-bottom: 2rem;
+        padding: 0.75rem 1.5rem;
+        background: var(--primary);
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        font-weight: 500;
+    }
+
+    .back-to-home:hover {
+        background: #1d4ed8;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <a href="{{ url_for('index') }}" class="back-to-home">← Back to Home</a>
+
+    <div class="search-header">
+        <h1>🔍 Search Results</h1>
+        
+        {# Show different messages based on whether query exists #}
+        {% if request.args.get('q') %}
+            <p class="results-count">
+                {# Use length filter to count results #}
+                Found <strong>{{ results | length }}</strong> 
+                result{% if results | length != 1 %}s{% endif %} 
+                for "<strong>{{ request.args.get('q') }}</strong>"
+            </p>
+        {% else %}
+            <p class="results-count">
+                Enter a search term above to find posts
+            </p>
+        {% endif %}
+    </div>
+
+    {# Show results if any were found #}
+    {% if results %}
+        <div class="search-results">
+            {% for post in results %}
+                <div class="result-item">
+                    <div class="result-title">
+                        <a href="{{ url_for('post_detail', post_id=post.id) }}">
+                            {{ post.title }}
+                        </a>
+                    </div>
+                    
+                    <div class="result-meta">
+                        By <strong>{{ post.author }}</strong> • 
+                        {{ post.date.strftime('%b %d, %Y') }}
+                    </div>
+                    
+                    <p class="result-excerpt">{{ post.excerpt }}</p>
+                    
+                    <div class="result-tags">
+                        {% for tag in post.tags %}
+                            <span class="result-tag">{{ tag }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    
+    {# Show empty state if no results #}
+    {% elif request.args.get('q') %}
+        <div class="empty-state">
+            <h2>😕 No posts found</h2>
+            <p>We couldn't find any posts matching "<strong>{{ request.args.get('q') }}</strong>"</p>
+            
+            <div class="search-suggestions">
+                <h3>Try searching for:</h3>
+                <div class="suggestion-list">
+                    <a href="{{ url_for('search', q='Flask') }}" class="suggestion-link">
+                        Flask
+                    </a>
+                    <a href="{{ url_for('search', q='Jinja2') }}" class="suggestion-link">
+                        Jinja2
+                    </a>
+                    <a href="{{ url_for('search', q='Python') }}" class="suggestion-link">
+                        Python
+                    </a>
+                    <a href="{{ url_for('search', q='API') }}" class="suggestion-link">
+                        API
+                    </a>
+                </div>
+            </div>
+        </div>
+    
+    {# Show prompt to enter search term #}
+    {% else %}
+        <div class="empty-state">
+            <h2>🎯 Start Searching</h2>
+            <p>Use the search box above to find posts by title, excerpt, or tags</p>
+        </div>
+    {% endif %}
+{% endblock %}
