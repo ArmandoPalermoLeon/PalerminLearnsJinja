@@ -29,6 +29,7 @@ CREATE TABLE SEMESTERS(
 
 CREATE TABLE degrees(
   id_degree INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  name_degree varchar(100) not null,
   duration varchar(50) NOT NULL,
   level varchar(50) NOT NULL,
   description TEXT NOT NULL
