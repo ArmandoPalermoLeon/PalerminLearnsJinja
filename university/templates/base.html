@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Palermo University{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Libre+Franklin:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              navy:    { DEFAULT: '#1B2A4A', light: '#243558', dark: '#111C31' },
+              gold:    { DEFAULT: '#C9A84C', light: '#D4B96A', dark: '#A8873A' },
+              cream:   { DEFAULT: '#F7F3EC', dark: '#EDE7DA' },
+              slate:   { DEFAULT: '#4A5568' },
+            },
+            fontFamily: {
+              serif:  ['EB Garamond', 'Georgia', 'serif'],
+              sans:   ['Libre Franklin', 'sans-serif'],
+            },
+          }
+        }
+      }
+    </script>
+    {% block extra_css %}{% endblock %}
+  </head>
+
+  <body class="bg-cream font-sans text-navy flex flex-col min-h-screen">
+
+    {# ── Navigation ── #}
+    <header class="bg-navy border-b-2 border-gold">
+
+      {# Top bar #}
+      <div class="bg-navy-dark border-b border-navy-light">
+        <div class="max-w-7xl mx-auto px-6 py-1.5 flex justify-end gap-6 text-xs text-gold-light font-sans tracking-wide">
+          <a href="#" class="hover:text-white transition-colors">Admissions</a>
+          <a href="#" class="hover:text-white transition-colors">Alumni</a>
+          <a href="{{ url_for('login') }}" class="hover:text-white transition-colors">Login</a>
+        </div>
+      </div>
+
+      {# Main nav #}
+      <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+
+        {# Logo #}
+        <a href="{{ url_for('index') }}" class="flex items-center gap-4 group no-underline">
+          <div class="w-12 h-12 rounded-full border-2 border-gold flex items-center justify-center bg-navy-light group-hover:bg-gold transition-colors duration-300">
+            <span class="font-serif text-gold text-xl font-semibold group-hover:text-navy transition-colors duration-300">P</span>
+          </div>
+          <div>
+            <div class="text-white font-serif text-xl leading-tight tracking-wide">Palermo University</div>
+            <div class="text-gold text-xs font-sans tracking-widest uppercase">Est. 1842</div>
+          </div>
+        </a>
+
+        {# Nav links #}
+        <nav>
+          <ul class="flex items-center gap-8 list-none m-0 p-0">
+            <li><a href="{{ url_for('index') }}" class="text-cream text-sm font-sans tracking-wide hover:text-gold transition-colors duration-200">Home</a></li>
+            <li><a href="#programs" class="text-cream text-sm font-sans tracking-wide hover:text-gold transition-colors duration-200">Programs</a></li>
+            <li><a href="#about" class="text-cream text-sm font-sans tracking-wide hover:text-gold transition-colors duration-200">About</a></li>
+            <li><a href="#news" class="text-cream text-sm font-sans tracking-wide hover:text-gold transition-colors duration-200">News</a></li>
+            <li>
+              <a href="{{ url_for('login') }}"
+                 class="ml-2 px-5 py-2 border border-gold text-gold text-sm font-sans tracking-wide hover:bg-gold hover:text-navy transition-all duration-200">
+                Student Portal
+              </a>
+            </li>
+          </ul>
+        </nav>
+
+      </div>
+    </header>
+
+    {# ── Main content ── #}
+    <main class="flex-grow">
+      {% block content %}
+        <div class="max-w-7xl mx-auto px-6 py-16 text-center">
+          <p class="font-serif text-2xl text-slate italic">Page content goes here.</p>
+        </div>
+      {% endblock %}
+    </main>
+
+    {# ── Footer ── #}
+    <footer class="bg-navy-dark border-t-2 border-gold mt-auto">
+      <div class="max-w-7xl mx-auto px-6 py-12 grid grid-cols-3 gap-12">
+
+        {# Brand column #}
+        <div>
+          <div class="font-serif text-white text-lg mb-1">Palermo University</div>
+          <div class="text-gold text-xs tracking-widest uppercase mb-4">Est. 1842</div>
+          <p class="text-cream text-sm font-sans leading-relaxed opacity-70">
+            Committed to excellence in education, research, and service to the community.
+          </p>
+        </div>
+
+        {# Quick links #}
+        <div>
+          <div class="text-gold font-sans text-xs tracking-widest uppercase mb-4">Quick Links</div>
+          <ul class="space-y-2 list-none p-0 m-0">
+            <li><a href="{{ url_for('index') }}" class="text-cream text-sm opacity-70 hover:opacity-100 hover:text-gold transition-all">Home</a></li>
+            <li><a href="#programs" class="text-cream text-sm opacity-70 hover:opacity-100 hover:text-gold transition-all">Programs</a></li>
+            <li><a href="#about" class="text-cream text-sm opacity-70 hover:opacity-100 hover:text-gold transition-all">About</a></li>
+            <li><a href="#news" class="text-cream text-sm opacity-70 hover:opacity-100 hover:text-gold transition-all">News & Events</a></li>
+          </ul>
+        </div>
+
+        {# Contact #}
+        <div>
+          <div class="text-gold font-sans text-xs tracking-widest uppercase mb-4">Contact</div>
+          <ul class="space-y-2 list-none p-0 m-0 text-cream text-sm opacity-70">
+            <li>123 University Ave, Palermo</li>
+            <li>info@palermo.edu</li>
+            <li>+1 (555) 000-1234</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="border-t border-navy-light">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center text-xs text-cream opacity-40 font-sans">
+          <span>&copy; {{ 2025 }} Palermo University. All rights reserved.</span>
+          <span>Flask &amp; PostgreSQL Learning Project</span>
+        </div>
+      </div>
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+  </body>
+</html>

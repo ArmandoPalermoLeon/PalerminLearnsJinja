@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+
+{% block title %}Palermo University — Home{% endblock %}
+
+{% block content %}
+
+{# ── Hero ── #}
+<section class="relative bg-navy overflow-hidden">
+
+  {# Decorative diagonal accent #}
+  <div class="absolute inset-0 opacity-10"
+       style="background-image: repeating-linear-gradient(45deg, #C9A84C 0px, #C9A84C 1px, transparent 1px, transparent 60px);">
+  </div>
+
+  <div class="relative max-w-7xl mx-auto px-6 py-28 flex flex-col items-start gap-6">
+    <div class="text-gold font-sans text-xs tracking-widest uppercase">Welcome to Palermo University</div>
+    <h1 class="font-serif text-white text-5xl leading-tight max-w-2xl">
+      Where Knowledge Meets <em class="text-gold not-italic">Purpose</em>
+    </h1>
+    <p class="text-cream opacity-75 font-sans text-lg max-w-xl leading-relaxed">
+      Since 1842, Palermo University has shaped generations of scholars, professionals, and leaders committed to making a lasting difference.
+    </p>
+    <div class="flex gap-4 mt-2">
+      <a href="#programs"
+         class="px-8 py-3 bg-gold text-navy font-sans text-sm font-semibold tracking-wide hover:bg-gold-light transition-colors duration-200">
+        Explore Programs
+      </a>
+      <a href="#about"
+         class="px-8 py-3 border border-cream text-cream font-sans text-sm tracking-wide hover:border-gold hover:text-gold transition-colors duration-200">
+        Learn More
+      </a>
+    </div>
+  </div>
+</section>
+
+{# ── Stats bar ── #}
+<section class="bg-gold">
+  <div class="max-w-7xl mx-auto px-6 py-6 grid grid-cols-3 divide-x divide-gold-dark">
+
+    <div class="flex flex-col items-center py-2">
+      <span class="font-serif text-navy text-4xl font-semibold">{{ stats.students }}</span>
+      <span class="font-sans text-navy text-xs tracking-widest uppercase mt-1 opacity-75">Enrolled Students</span>
+    </div>
+
+    <div class="flex flex-col items-center py-2">
+      <span class="font-serif text-navy text-4xl font-semibold">{{ stats.courses }}</span>
+      <span class="font-sans text-navy text-xs tracking-widest uppercase mt-1 opacity-75">Courses Offered</span>
+    </div>
+
+    <div class="flex flex-col items-center py-2">
+      <span class="font-serif text-navy text-4xl font-semibold">{{ stats.professors }}</span>
+      <span class="font-sans text-navy text-xs tracking-widest uppercase mt-1 opacity-75">Faculty Members</span>
+    </div>
+
+  </div>
+</section>
+
+{# ── Featured Degrees ── #}
+<section id="programs" class="bg-cream-dark py-20">
+  <div class="max-w-7xl mx-auto px-6">
+
+    <div class="mb-12">
+      <div class="text-gold font-sans text-xs tracking-widest uppercase mb-2">Academics</div>
+      <h2 class="font-serif text-navy text-4xl">Our Programs</h2>
+      <div class="w-16 h-0.5 bg-gold mt-4"></div>
+    </div>
+
+    <div class="grid grid-cols-3 gap-6">
+      {% for degree in degrees %}
+      <div class="bg-cream border border-cream-dark hover:border-gold transition-colors duration-200 p-8 flex flex-col gap-3 group">
+        <div class="text-gold font-sans text-xs tracking-widest uppercase">{{ degree.level }}</div>
+        <h3 class="font-serif text-navy text-xl leading-snug group-hover:text-navy-light transition-colors">
+          {{ degree.description | truncate(60) }}
+        </h3>
+        <div class="text-slate font-sans text-sm">Duration: {{ degree.duration }}</div>
+        <div class="mt-auto pt-4">
+          <span class="text-gold font-sans text-xs tracking-wide uppercase border-b border-gold pb-0.5 group-hover:text-gold-dark transition-colors cursor-pointer">
+            View Curriculum →
+          </span>
+        </div>
+      </div>
+      {% else %}
+      <p class="font-sans text-slate col-span-3 italic">No programs available at this time.</p>
+      {% endfor %}
+    </div>
+
+  </div>
+</section>
+
+{# ── About strip ── #}
+<section id="about" class="bg-navy py-20">
+  <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 gap-16 items-center">
+    <div>
+      <div class="text-gold font-sans text-xs tracking-widest uppercase mb-2">About Us</div>
+      <h2 class="font-serif text-white text-4xl mb-6">Over 180 Years of Academic Excellence</h2>
+      <p class="text-cream opacity-75 font-sans text-base leading-relaxed mb-4">
+        Founded in 1842, Palermo University has grown from a small liberal arts college into a comprehensive research institution spanning multiple disciplines and faculties.
+      </p>
+      <p class="text-cream opacity-75 font-sans text-base leading-relaxed">
+        Our faculty, facilities, and community are dedicated to producing graduates who are prepared not just for careers, but for lives of meaning and contribution.
+      </p>
+    </div>
+    <div class="grid grid-cols-2 gap-4">
+      <div class="border border-navy-light p-6 hover:border-gold transition-colors">
+        <div class="font-serif text-gold text-3xl mb-1">{{ stats.departments }}+</div>
+        <div class="font-sans text-cream text-xs tracking-wide uppercase opacity-60">Departments</div>
+      </div>
+      <div class="border border-navy-light p-6 hover:border-gold transition-colors">
+        <div class="font-serif text-gold text-3xl mb-1">{{ stats.professors }}+</div>
+        <div class="font-sans text-cream text-xs tracking-wide uppercase opacity-60">Faculty</div>
+      </div>
+      <div class="border border-navy-light p-6 hover:border-gold transition-colors">
+        <div class="font-serif text-gold text-3xl mb-1">{{ stats.courses }}+</div>
+        <div class="font-sans text-cream text-xs tracking-wide uppercase opacity-60">Courses</div>
+      </div>
+      <div class="border border-navy-light p-6 hover:border-gold transition-colors">
+        <div class="font-serif text-gold text-3xl mb-1">{{ stats.students }}+</div>
+        <div class="font-sans text-cream text-xs tracking-wide uppercase opacity-60">Students</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{# ── News & Events ── #}
+<section id="news" class="bg-cream py-20">
+  <div class="max-w-7xl mx-auto px-6">
+
+    <div class="mb-12">
+      <div class="text-gold font-sans text-xs tracking-widest uppercase mb-2">Latest</div>
+      <h2 class="font-serif text-navy text-4xl">News &amp; Events</h2>
+      <div class="w-16 h-0.5 bg-gold mt-4"></div>
+    </div>
+
+    <div class="grid grid-cols-3 gap-6">
+
+      <article class="border-t-2 border-gold pt-6 flex flex-col gap-3">
+        <div class="font-sans text-xs text-slate tracking-wide uppercase">March 15, 2025 &nbsp;·&nbsp; Academic</div>
+        <h3 class="font-serif text-navy text-xl leading-snug hover:text-navy-light cursor-pointer transition-colors">
+          Spring Semester Research Symposium Open for Submissions
+        </h3>
+        <p class="font-sans text-slate text-sm leading-relaxed">
+          Undergraduate and graduate students are invited to submit their research for presentation at this year's annual symposium held in May.
+        </p>
+        <a href="#" class="mt-auto text-gold font-sans text-xs tracking-wide uppercase border-b border-gold pb-0.5 self-start hover:text-gold-dark transition-colors">Read More →</a>
+      </article>
+
+      <article class="border-t-2 border-gold pt-6 flex flex-col gap-3">
+        <div class="font-sans text-xs text-slate tracking-wide uppercase">March 10, 2025 &nbsp;·&nbsp; Campus Life</div>
+        <h3 class="font-serif text-navy text-xl leading-snug hover:text-navy-light cursor-pointer transition-colors">
+          New Dining Hall Opens in the West Campus Building
+        </h3>
+        <p class="font-sans text-slate text-sm leading-relaxed">
+          The newly renovated dining facility now offers extended hours and an expanded menu serving over 500 students daily.
+        </p>
+        <a href="#" class="mt-auto text-gold font-sans text-xs tracking-wide uppercase border-b border-gold pb-0.5 self-start hover:text-gold-dark transition-colors">Read More →</a>
+      </article>
+
+      <article class="border-t-2 border-gold pt-6 flex flex-col gap-3">
+        <div class="font-sans text-xs text-slate tracking-wide uppercase">March 5, 2025 &nbsp;·&nbsp; Athletics</div>
+        <h3 class="font-serif text-navy text-xl leading-snug hover:text-navy-light cursor-pointer transition-colors">
+          Palermo Tigers Win Regional Championship for Third Consecutive Year
+        </h3>
+        <p class="font-sans text-slate text-sm leading-relaxed">
+          The university's basketball team clinched the regional title last weekend, advancing to the national tournament in April.
+        </p>
+        <a href="#" class="mt-auto text-gold font-sans text-xs tracking-wide uppercase border-b border-gold pb-0.5 self-start hover:text-gold-dark transition-colors">Read More →</a>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+{# ── CTA Banner ── #}
+<section class="bg-gold py-14">
+  <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
+    <div>
+      <h2 class="font-serif text-navy text-3xl mb-1">Ready to Begin Your Journey?</h2>
+      <p class="font-sans text-navy opacity-70 text-sm">Applications for the Fall 2025 semester are now open.</p>
+    </div>
+    <a href="#"
+       class="px-10 py-3 bg-navy text-cream font-sans text-sm tracking-wide hover:bg-navy-light transition-colors duration-200 whitespace-nowrap">
+      Apply Now
+    </a>
+  </div>
+</section>
+
+{% endblock %}
